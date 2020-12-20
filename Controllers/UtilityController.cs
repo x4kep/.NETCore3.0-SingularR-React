@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using EuroDeskBookstoresAssigment.Models;
+using EuroDeskBookstoresAssigment.ModelsDto;
 using EuroDeskBookstoresAssigment.Repositories;
+using EuroDeskBookstoresAssigment.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace EuroDeskBookstoresAssigment.Controllers
 {
@@ -15,11 +18,13 @@ namespace EuroDeskBookstoresAssigment.Controllers
     {
         private readonly ILogger<UtilityController> _logger;
         private readonly IDbRepository _context;
+        protected readonly IHubContext<BookstoreHub> _bookstoreHub;
 
-        public UtilityController(ILogger<UtilityController> logger, IDbRepository context)
+        public UtilityController(ILogger<UtilityController> logger, IDbRepository context, IHubContext<BookstoreHub> bookstoreHub)
         {
             _logger = logger;
             _context = context;
+            _bookstoreHub = bookstoreHub;
         }
 
         // GET: api/Utility/GetBookstoreBooks/1
@@ -28,13 +33,31 @@ namespace EuroDeskBookstoresAssigment.Controllers
         {
             try
             {
-                var bookstores = await _context.GetBookstoreBooks(id);
+                var bookstores = await _context.GetBookstoreBooksAsync(id);
                 if (bookstores == null)
                     return NotFound();
 
                 return Ok(bookstores);
             }
             catch(Exception e)
+            {
+                return BadRequest();
+            }
+        }
+
+        // GET: api/Utility/GetBookstoreBooksNot/1
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetNotBookstoreBooks(int id)
+        {
+            try
+            {
+                var bookstores = await _context.GetNotBookstoreBooksAsync(id);
+                if (bookstores == null)
+                    return NotFound();
+
+                return Ok(bookstores);
+            }
+            catch (Exception e)
             {
                 return BadRequest();
             }
@@ -86,6 +109,10 @@ namespace EuroDeskBookstoresAssigment.Controllers
                 if (bookstores == false)
                     return BadRequest();
 
+                var bookstorebooks = await _context.GetBookstoreBooksAsync(bookstoreId);
+                var bookstoreBooksHubDto = new BookstoreBooksHubDto { BookstoreBooks = bookstorebooks, BookstoreId = bookstoreId };
+                await _bookstoreHub.Clients.All.SendAsync("notifyBookstoreChanges", bookstoreBooksHubDto);
+
                 return Ok(bookstores);
             }
             catch (Exception e)
@@ -104,12 +131,23 @@ namespace EuroDeskBookstoresAssigment.Controllers
                 if (bookstores == false)
                     return BadRequest();
 
+                var bookstorebooks = await _context.GetBookstoreBooksAsync(bookstoreId);
+                var bookstoreBooksHubDto = new BookstoreBooksHubDto { BookstoreBooks = bookstorebooks, BookstoreId = bookstoreId };
+                await _bookstoreHub.Clients.All.SendAsync("notifyBookstoreChanges", bookstoreBooksHubDto);
+
                 return Ok(bookstores);
             }
             catch (Exception e)
             {
                 return BadRequest();
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SignalR([FromBody]MessageDto message)
+        {
+            await _bookstoreHub.Clients.All.SendAsync("sendToReact", "The message '" + message.Message + "' has been received");
+            return Ok();
         }
 
     }

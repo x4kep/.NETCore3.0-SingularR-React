@@ -7,7 +7,10 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.SignalR;
 using EuroDeskBookstoresAssigment.Repositories;
+using EuroDeskBookstoresAssigment.Hubs;
+using System;
 
 namespace EuroDeskBookstoresAssigment
 {
@@ -25,9 +28,8 @@ namespace EuroDeskBookstoresAssigment
         {
             services.AddControllersWithViews();
             services.AddEntityFrameworkSqlite().AddDbContext<DatabaseContext>();
-
-            // dependency injection
             services.AddScoped<IDbRepository, DbRepository>();
+            services.AddSignalR();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -37,7 +39,7 @@ namespace EuroDeskBookstoresAssigment
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime hostApplicationLifetime)
         {
             if (env.IsDevelopment())
             {
@@ -58,6 +60,8 @@ namespace EuroDeskBookstoresAssigment
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<BookstoreHub>("/bookstorebooks");
+
                 endpoints.MapControllers();
             });
 
@@ -70,6 +74,7 @@ namespace EuroDeskBookstoresAssigment
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+
         }
     }
 }

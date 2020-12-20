@@ -17,15 +17,16 @@ namespace EuroDeskBookstoresAssigment.Repositories
         }
         async public Task<List<Bookstore>> GetBookstoresAsync()
         {
-            return await _context.Bookstore.ToListAsync();
+            return await _context.Bookstore.Where(b => !b.IsDeleted).OrderByDescending(b => b.Id).ToListAsync();
         }
 
         async public Task<Bookstore> GetBookstoreAsync(int id)
         {
-            return await _context.Bookstore.Where(b => b.Id == id).SingleOrDefaultAsync();
+            return await _context.Bookstore.Where(b => b.Id == id && !b.IsDeleted).SingleOrDefaultAsync();
         }
         async public Task CreateBookstoreAsync(Bookstore bookstore)
         {
+            bookstore.CreatedDate = DateTime.UtcNow;
             await _context.Bookstore.AddAsync(bookstore);
             await _context.SaveChangesAsync();
         }
@@ -33,6 +34,7 @@ namespace EuroDeskBookstoresAssigment.Repositories
         {
             if(bookstore.Id > 0)
             {
+                bookstore.UpdatedDate = DateTime.UtcNow;
                 _context.Update(bookstore);
                 await _context.SaveChangesAsync();
             }
@@ -48,7 +50,8 @@ namespace EuroDeskBookstoresAssigment.Repositories
 
             if (bookstore != null)
             {
-                bookstore.IsDeleted = true; 
+                bookstore.IsDeleted = true;
+                bookstore.UpdatedDate = DateTime.UtcNow;
                 _context.Update(bookstore);
                 await _context.SaveChangesAsync();
                 result = 1;
@@ -106,12 +109,28 @@ namespace EuroDeskBookstoresAssigment.Repositories
             return result;
         }
 
-        async public Task<List<Book>> GetBookstoreBooks(int bookstoreId)
+        async public Task<List<Book>> GetBookstoreBooksAsync(int bookstoreId)
         {
             var result = new List<Book>();
             if (bookstoreId > 0)
                 result = await _context.Book.Where(b => b.Bookstore.Any(bs => bs.BookstoreId == bookstoreId)).ToListAsync();
             return result;
+        }
+
+        async public Task<List<Book>> GetBooksAsync()
+        {
+            var result = new List<Book>();
+            result = await _context.Book.Where(b => !b.IsDeleted).ToListAsync();
+            return result;
+        }
+
+        async public Task<List<Book>> GetNotBookstoreBooksAsync(int bookstoreId)
+        {
+            var getBookstoreBooks = GetBookstoreBooksAsync(bookstoreId).Result;
+            var getBooks = GetBooksAsync().Result;
+            var diffrence = getBooks.Where(bb => !getBookstoreBooks.Any(b => b.Id == bb.Id)).ToList();
+
+            return diffrence;
         }
     }
 }
