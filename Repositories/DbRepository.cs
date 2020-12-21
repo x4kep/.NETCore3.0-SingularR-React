@@ -106,6 +106,54 @@ namespace EuroDeskBookstoresAssigment.Repositories
             return result;
         }
 
+        async public Task<List<Author>> GetAuthorsAsync()
+        {
+            var result = new List<Author>();
+            result = await _context.Author.Where(b => !b.IsDeleted).ToListAsync();
+            return result;
+        }
+
+        async public Task<Author> GetAuthorAsync(int id)
+        {
+            return await _context.Author.Where(b => b.Id == id && !b.IsDeleted).SingleOrDefaultAsync(); ;
+        }
+
+        async public Task CreateAuthorAsync(Author author)
+        {
+            author.CreatedDate = DateTime.UtcNow;
+            _context.Author.Add(author);
+            await _context.SaveChangesAsync();
+        }
+
+        async public Task UpdateAuthorAsync(Author author)
+        {
+            if (author.Id > 0)
+            {
+                author.UpdatedDate = DateTime.UtcNow;
+                _context.Update(author);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        async public Task<int> DeleteAuthorAsync(int authorId)
+        {
+            var result = 0;
+            if (authorId <= 0)
+                return result;
+
+            var bookstore = await _context.Author.FirstOrDefaultAsync(b => b.Id == authorId);
+
+            if (bookstore != null)
+            {
+                bookstore.IsDeleted = true;
+                bookstore.UpdatedDate = DateTime.UtcNow;
+                _context.Update(bookstore);
+                await _context.SaveChangesAsync();
+                result = 1;
+            }
+            return result;
+        }
+
         async public Task<List<Book>> GetAuthorBooksAsync(int authorId)
         {
             return await _context.Book.Where(b => b.AuthorId == authorId).ToListAsync();
@@ -172,5 +220,6 @@ namespace EuroDeskBookstoresAssigment.Repositories
 
             return diffrence;
         }
+
     }
 }

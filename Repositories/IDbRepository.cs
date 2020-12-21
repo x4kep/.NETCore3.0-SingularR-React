@@ -22,6 +22,13 @@ namespace EuroDeskBookstoresAssigment.Repositories
         Task UpdateBookAsync(Book bookstore);
         Task<int> DeleteBookAsync(int bookstoreId);
 
+        // CRUD Author
+        Task<List<Author>> GetAuthorsAsync();
+        Task<Author> GetAuthorAsync(int id);
+        Task CreateAuthorAsync(Author bookstore);
+        Task UpdateAuthorAsync(Author bookstore);
+        Task<int> DeleteAuthorAsync(int bookstoreId);
+
         // Others
         Task<List<Book>> GetAuthorBooksAsync(int authorId);
         Task<AuthorBio> GetAuthorBioAsync(int authorId);
