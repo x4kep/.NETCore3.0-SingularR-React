@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using EuroDeskBookstoresAssigment.Models;
 using EuroDeskBookstoresAssigment.Repositories;
+using AutoMapper;
+using EuroDeskBookstoresAssigment.ModelsDto;
 
 namespace EuroDeskBookstoresAssigment.Controllers
 {
@@ -15,11 +17,13 @@ namespace EuroDeskBookstoresAssigment.Controllers
     {
         private readonly ILogger<AuthorController> _logger;
         private readonly IDbRepository _context;
+        private readonly IMapper _mapper;
 
-        public AuthorController(ILogger<AuthorController> logger, IDbRepository context)
+        public AuthorController(ILogger<AuthorController> logger, IDbRepository context, IMapper mapper)
         {
             _logger = logger;
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Author
@@ -29,11 +33,13 @@ namespace EuroDeskBookstoresAssigment.Controllers
         {
             try
             {
-                var books = await _context.GetAuthorsAsync();
-                if (books == null)
+                var authors = await _context.GetAuthorsAsync();
+                if (authors == null)
                     return NotFound();
 
-                return Ok(books);
+                var authorsDto = _mapper.Map<List<AuthorDto>>(authors);
+
+                return Ok(authorsDto);
             }
             catch(Exception e)
             {
@@ -47,11 +53,13 @@ namespace EuroDeskBookstoresAssigment.Controllers
         {
             try
             {
-                var book = await _context.GetAuthorAsync(id);
-                if (book == null)
+                var author = await _context.GetAuthorAsync(id);
+                if (author == null)
                     return NotFound();
 
-                return Ok(book);
+                var authorDto = _mapper.Map<AuthorDto>(author);
+
+                return Ok(author);
             }
             catch (Exception e)
             {

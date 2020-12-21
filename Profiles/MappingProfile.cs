@@ -12,7 +12,10 @@ namespace EuroDeskBookstoresAssigment.Profiles
     {
         public MappingProfile()
         {
+            CreateMap<Bookstore, BookstoreDto>();
             CreateMap<Book, BookDto>();
+            CreateMap<Author, AuthorDto>();
+            CreateMap<AuthorBio, AuthorBioDto>();
         }
     }
 }

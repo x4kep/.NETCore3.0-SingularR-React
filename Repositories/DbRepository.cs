@@ -5,15 +5,18 @@ using System.Threading.Tasks;
 using EuroDeskBookstoresAssigment.Models;
 using EuroDeskBookstoresAssigment.Data;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace EuroDeskBookstoresAssigment.Repositories
 {
     public class DbRepository : IDbRepository
     {
         private DatabaseContext _context;
-        public DbRepository(DatabaseContext context)
+        private readonly IMapper _mapper;
+        public DbRepository(DatabaseContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         async public Task<List<Bookstore>> GetBookstoresAsync()
         {

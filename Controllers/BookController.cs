@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using EuroDeskBookstoresAssigment.Models;
 using EuroDeskBookstoresAssigment.Repositories;
+using EuroDeskBookstoresAssigment.ModelsDto;
+using AutoMapper;
 
 namespace EuroDeskBookstoresAssigment.Controllers
 {
@@ -15,11 +17,13 @@ namespace EuroDeskBookstoresAssigment.Controllers
     {
         private readonly ILogger<BookController> _logger;
         private readonly IDbRepository _context;
+        private readonly IMapper _mapper;
 
-        public BookController(ILogger<BookController> logger, IDbRepository context)
+        public BookController(ILogger<BookController> logger, IDbRepository context, IMapper mapper)
         {
             _logger = logger;
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Book
@@ -33,7 +37,9 @@ namespace EuroDeskBookstoresAssigment.Controllers
                 if (books == null)
                     return NotFound();
 
-                return Ok(books);
+                var booksDto = _mapper.Map<List<BookDto>>(books);
+
+                return Ok(booksDto);
             }
             catch(Exception e)
             {
@@ -51,7 +57,9 @@ namespace EuroDeskBookstoresAssigment.Controllers
                 if (book == null)
                     return NotFound();
 
-                return Ok(book);
+                var bookDto = _mapper.Map<BookDto>(book);
+
+                return Ok(bookDto);
             }
             catch (Exception e)
             {
