@@ -11,15 +11,15 @@ const BookstoreCreate: React.FC = () => {
 
   const createBookstore = () => {
     BookstoreService.createBookstoreAsync(bookstore).then(response => {
-      history.push("/Bookstores");
+      history.push("/");
     }).catch(e => {
       console.log(e);
     });
   }
 
-  const handleInputChange = (e:any) => {
+  const handleInputChange = (e: any) => {
     const { name, value } = e.target;
-    setBookstore({...bookstore, [name]: value});
+    setBookstore({ ...bookstore, [name]: value });
   };
 
   return (
@@ -35,8 +35,8 @@ const BookstoreCreate: React.FC = () => {
           onChange={handleInputChange}
         ></input>
       </form>
-      <Link to={"/Bookstores"} className="btn btn-primary ml-3 mt-3" role="button">Go Back</Link>
-      <a className="btn btn-primary ml-3 float-right mt-3" role="button" onClick={createBookstore}>Create</a>
+      <Link to={"/"} className="btn btn-primary mt-3" role="button">Go Back</Link>
+      <a className="btn btn-primary float-right mt-3" role="button" onClick={createBookstore}>Create</a>
     </div>
   );
 }

@@ -12,12 +12,12 @@ import BookstoreCreate from './components/BookstoreCRUD/BookstoreCreate';
 
 export default () => (
     <Layout>
-        <Route exact path='/' component={Home} />
-        <Route path='/counter' component={Counter} />
-        <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
-        <Route path='/bookstores' component={Bookstores} />
+        <Route exact path='/' component={Bookstores} />
         <Route path='/bookstore/:id' component={Bookstore} />
         <Route path='/bookstoreedit/:id' component={BookstoreEdit} />
         <Route path='/bookstorecreate' component={BookstoreCreate} />
+        <Route path='/home' component={Home} />
+        <Route path='/counter' component={Counter} />
+        <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
     </Layout>
 );

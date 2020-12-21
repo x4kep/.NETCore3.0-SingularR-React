@@ -68,7 +68,7 @@ const Bookstore: React.FC = () => {
         ></input>
       </div>
       <h5 className="mt-3">Books</h5>
-      {(bookstoreBooks) ? (
+      {(bookstoreBooks != undefined && bookstoreBooks.length > 0) ? (
         <table className="table table-striped">
           <thead>
             <tr>
@@ -86,7 +86,7 @@ const Bookstore: React.FC = () => {
       ) : (
           <p>No books</p>
         )}
-      <Link to={"/Bookstores"} className="btn btn-primary ml-3 mt-3" role="button">Go Back</Link>
+      <Link to={"/"} className="btn btn-primary mt-3" role="button">Go Back</Link>
     </div>
   );
 }

@@ -3,14 +3,16 @@ import { useParams } from 'react-router';
 import BookstoreService from "../../services/BookstoreService.js"
 import { BookstoreDto } from '../../ModelsDTO/Bookstore'
 import { Link } from "react-router-dom";
+import { useHistory } from 'react-router';
 
 const BookstoreEdit: React.FC = () => {
-  const [bookstore, setBookstore] = useState<BookstoreDto>();
+  const [bookstore, setBookstore] = useState({} as BookstoreDto);
   const [bookstoreBooks, setBookstoreBooks] = useState<BookstoreDto[]>();
   const [notBookstoreBooks, setNotBookstoreBooks] = useState<BookstoreDto[]>();
-  const [bookstoreName, setBookstoreName] = useState<BookstoreDto[]>();
+  const [bookstoreName, setBookstoreName] = useState("");
 
   let { id }: any = useParams();
+  let history = useHistory();
 
   useEffect(() => {
     getBookstore();
@@ -21,6 +23,7 @@ const BookstoreEdit: React.FC = () => {
   const getBookstore = () => {
     BookstoreService.getBookstoreAsync(id).then(response => {
       setBookstore(response.data);
+      setBookstoreName(response.data.name);
       console.log(response.data);
     }).catch(e => {
       console.log(e);
@@ -40,6 +43,14 @@ const BookstoreEdit: React.FC = () => {
     BookstoreService.getNotBookstoreBooksAsync(id).then(response => {
       setNotBookstoreBooks(response.data);
       console.log(response.data);
+    }).catch(e => {
+      console.log(e);
+    });
+  }
+
+  const updateBookstore = () => {
+    BookstoreService.updateBookstoreAsync(bookstore).then(response => {
+      history.push("/");
     }).catch(e => {
       console.log(e);
     });
@@ -72,7 +83,8 @@ const BookstoreEdit: React.FC = () => {
   }
 
   const handleInputChange = (e:any) => {
-    const { value } = e.target;
+    const { name, value } = e.target;
+    setBookstore({ ...bookstore, [name]: value });
     setBookstoreName(value);
   };
 
@@ -86,12 +98,12 @@ const BookstoreEdit: React.FC = () => {
           id="name"
           name="name"
           className="form-control"
-          value={bookstore && bookstore.name}
+          value={bookstoreName}
           onChange={e => handleInputChange(e)}
         ></input>
       </form>
       <h5 className="mt-3">Books</h5>
-      {bookstoreBooks ? (
+      { (bookstoreBooks != undefined && bookstoreBooks.length > 0) ? (
         <table className="table table-striped">
           <thead>
             <tr>
@@ -130,8 +142,8 @@ const BookstoreEdit: React.FC = () => {
           ))}
         </tbody>
       </table>
-      <Link to={"/Bookstores"} className="btn btn-primary ml-3 mt-3" role="button">Go Back</Link>
-      <a className="btn btn-primary ml-3 float-right mt-3" role="button">Save</a>
+      <Link to={"/"} className="btn btn-primary mt-3" role="button">Go Back</Link>
+      <button className="btn btn-primary  float-right mt-3" role="button" onClick={updateBookstore}>Save</button>
     </div>
   );
 }
