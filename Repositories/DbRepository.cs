@@ -74,8 +74,8 @@ namespace EuroDeskBookstoresAssigment.Repositories
             var result = false;
             if(bookId > 0 && bookstoreId > 0)
             {
-                var book = _context.Book.FirstAsync(b => b.Id == bookId).Result;
-                var bookstore = _context.Bookstore.FirstAsync(b => b.Id == bookstoreId).Result;
+                var book = await _context.Book.FirstOrDefaultAsync(b => b.Id == bookId);
+                var bookstore = await _context.Bookstore.FirstOrDefaultAsync(b => b.Id == bookstoreId);
 
                 if(book != null && bookstore != null)
                 {
@@ -86,8 +86,8 @@ namespace EuroDeskBookstoresAssigment.Repositories
                     };
 
                     _context.Add(bookBookstore);
-                    result = true;
                     await _context.SaveChangesAsync();
+                    result = true;
                 }
             }
             return result;
@@ -98,12 +98,12 @@ namespace EuroDeskBookstoresAssigment.Repositories
             var result = false;
             if (bookId > 0 && bookstoreId > 0)
             {
-                var bookBookstore = _context.BookBookstore.FirstAsync(bbs => bbs.BookId == bookId && bbs.BookstoreId == bookstoreId).Result;
+                var bookBookstore = await _context.BookBookstore.FirstOrDefaultAsync(bbs => bbs.BookId == bookId && bbs.BookstoreId == bookstoreId);
                 if(bookBookstore != null)
                 {
                     _context.Remove(bookBookstore);
-                    result = true;
                     await _context.SaveChangesAsync();
+                    result = true;
                 }
             }
             return result;
@@ -126,8 +126,8 @@ namespace EuroDeskBookstoresAssigment.Repositories
 
         async public Task<List<Book>> GetNotBookstoreBooksAsync(int bookstoreId)
         {
-            var getBookstoreBooks = GetBookstoreBooksAsync(bookstoreId).Result;
-            var getBooks = GetBooksAsync().Result;
+            var getBookstoreBooks = await GetBookstoreBooksAsync(bookstoreId);
+            var getBooks = await GetBooksAsync();
             var diffrence = getBooks.Where(bb => !getBookstoreBooks.Any(b => b.Id == bb.Id)).ToList();
 
             return diffrence;

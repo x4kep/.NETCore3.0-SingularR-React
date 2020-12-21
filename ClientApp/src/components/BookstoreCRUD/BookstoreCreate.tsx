@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { connect } from 'react-redux';
-import { RouteComponentProps, useHistory } from 'react-router';
-import * as signalR from "@microsoft/signalr";
+import React, { useState } from "react";
+import { useHistory } from 'react-router';
 import BookstoreService from "../../services/BookstoreService.js"
 import { BookstoreDto } from '../../ModelsDTO/Bookstore'
 import { Link } from "react-router-dom";

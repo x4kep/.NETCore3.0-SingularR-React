@@ -9,6 +9,7 @@ using EuroDeskBookstoresAssigment.ModelsDto;
 using EuroDeskBookstoresAssigment.Repositories;
 using EuroDeskBookstoresAssigment.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using AutoMapper;
 
 namespace EuroDeskBookstoresAssigment.Controllers
 {
@@ -19,12 +20,14 @@ namespace EuroDeskBookstoresAssigment.Controllers
         private readonly ILogger<UtilityController> _logger;
         private readonly IDbRepository _context;
         protected readonly IHubContext<BookstoreHub> _bookstoreHub;
+        private readonly IMapper _mapper;
 
-        public UtilityController(ILogger<UtilityController> logger, IDbRepository context, IHubContext<BookstoreHub> bookstoreHub)
+        public UtilityController(ILogger<UtilityController> logger, IDbRepository context, IHubContext<BookstoreHub> bookstoreHub, IMapper mapper)
         {
             _logger = logger;
             _context = context;
             _bookstoreHub = bookstoreHub;
+            _mapper = mapper;
         }
 
         // GET: api/Utility/GetBookstoreBooks/1
@@ -99,7 +102,7 @@ namespace EuroDeskBookstoresAssigment.Controllers
             }
         }
 
-        // POST: api/Utility/AddBookBookstore
+        // POST: api/Utility/AddBookBookstore?bookId=1&bookstoreId=3
         [HttpPost]
         public async Task<IActionResult> AddBookBookstore(int bookId, int bookstoreId)
         {
@@ -110,7 +113,8 @@ namespace EuroDeskBookstoresAssigment.Controllers
                     return BadRequest();
 
                 var bookstorebooks = await _context.GetBookstoreBooksAsync(bookstoreId);
-                var bookstoreBooksHubDto = new BookstoreBooksHubDto { BookstoreBooks = bookstorebooks, BookstoreId = bookstoreId };
+                var bookstoreBooksHubDto = new BookstoreBooksHubDto { BookstoreBooks = _mapper.Map<List<BookDto>>(bookstorebooks), BookstoreId = bookstoreId };
+
                 await _bookstoreHub.Clients.All.SendAsync("notifyBookstoreChanges", bookstoreBooksHubDto);
 
                 return Ok(bookstores);
@@ -121,7 +125,7 @@ namespace EuroDeskBookstoresAssigment.Controllers
             }
         }
 
-        // GET: api/Utility/RemoveBookBookstore
+        // POST: api/Utility/RemoveBookBookstore?bookId=1&bookstoreId=3
         [HttpPost]
         public async Task<IActionResult> RemoveBookBookstore(int bookId, int bookstoreId)
         {
@@ -132,7 +136,8 @@ namespace EuroDeskBookstoresAssigment.Controllers
                     return BadRequest();
 
                 var bookstorebooks = await _context.GetBookstoreBooksAsync(bookstoreId);
-                var bookstoreBooksHubDto = new BookstoreBooksHubDto { BookstoreBooks = bookstorebooks, BookstoreId = bookstoreId };
+                var bookstoreBooksHubDto = new BookstoreBooksHubDto { BookstoreBooks = _mapper.Map<List<BookDto>>(bookstorebooks), BookstoreId = bookstoreId };
+
                 await _bookstoreHub.Clients.All.SendAsync("notifyBookstoreChanges", bookstoreBooksHubDto);
 
                 return Ok(bookstores);

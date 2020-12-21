@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.SignalR;
 using EuroDeskBookstoresAssigment.Repositories;
 using EuroDeskBookstoresAssigment.Hubs;
 using System;
+using AutoMapper;
 
 namespace EuroDeskBookstoresAssigment
 {
@@ -30,6 +31,7 @@ namespace EuroDeskBookstoresAssigment
             services.AddEntityFrameworkSqlite().AddDbContext<DatabaseContext>();
             services.AddScoped<IDbRepository, DbRepository>();
             services.AddSignalR();
+            services.AddAutoMapper(typeof(Startup).Assembly);
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { connect } from 'react-redux';
-import { RouteComponentProps, useParams } from 'react-router';
-import * as signalR from "@microsoft/signalr";
+import { useParams } from 'react-router';
 import BookstoreService from "../../services/BookstoreService.js"
 import { BookstoreDto } from '../../ModelsDTO/Bookstore'
 import { Link } from "react-router-dom";
@@ -10,7 +8,7 @@ const BookstoreEdit: React.FC = () => {
   const [bookstore, setBookstore] = useState<BookstoreDto>();
   const [bookstoreBooks, setBookstoreBooks] = useState<BookstoreDto[]>();
   const [notBookstoreBooks, setNotBookstoreBooks] = useState<BookstoreDto[]>();
-  const [name, setName] = useState('');
+  const [bookstoreName, setBookstoreName] = useState<BookstoreDto[]>();
 
   let { id }: any = useParams();
 
@@ -73,10 +71,10 @@ const BookstoreEdit: React.FC = () => {
     });
   }
 
-  const onChangeBookstoreName = (input: string) => {
-    setName(input);
-    console.log(input);
-  }
+  const handleInputChange = (e:any) => {
+    const { value } = e.target;
+    setBookstoreName(value);
+  };
 
   return (
     <div>
@@ -89,7 +87,7 @@ const BookstoreEdit: React.FC = () => {
           name="name"
           className="form-control"
           value={bookstore && bookstore.name}
-          onChange={e => onChangeBookstoreName(e.target.value)}
+          onChange={e => handleInputChange(e)}
         ></input>
       </form>
       <h5 className="mt-3">Books</h5>
@@ -106,7 +104,7 @@ const BookstoreEdit: React.FC = () => {
               <tr key={index}>
                 <td className="align-middle" style={{ width: "80%" }}>{bookstoreBooks.name}</td>
                 <td className="align-middle">
-                  <a className="btn btn-outline-danger ml-3 mt-1" role="button" data-bookId={bookstoreBooks.id} onClick={removeBookBookstore}>Remove</a>
+                  <a className="btn btn-outline-danger ml-3 mt-1" role="button"  data-bookid={bookstoreBooks.id} onClick={removeBookBookstore}>Remove</a>
                 </td>
               </tr>
             ))}
@@ -116,16 +114,6 @@ const BookstoreEdit: React.FC = () => {
           <p>No books</p>
       )}
       <h5 className="mt-3">Add books</h5>
-      <form>
-        <label htmlFor="searchBook">Search book</label>
-        <input
-          type="text"
-          id="searchBook"
-          name="searchBook"
-          className="form-control"
-          onChange={e => onChangeBookstoreName(e.target.value)}
-        ></input>
-      </form>
       <table className="table table-striped">
         <thead>
           <tr>
@@ -137,7 +125,7 @@ const BookstoreEdit: React.FC = () => {
           {notBookstoreBooks && notBookstoreBooks.map((notBookstoreBooks, index) => (
             <tr key={index}>
               <td className="align-middle" style={{ width: "80%" }}>{notBookstoreBooks.name}</td>
-              <td className="align-middle"><a className="btn btn-outline-success ml-3 mt-1" role="button" data-bookId={notBookstoreBooks.id} onClick={addBookBookstore}>Add</a></td>
+              <td className="align-middle"><a className="btn btn-outline-success ml-3 mt-1" role="button" data-bookid={notBookstoreBooks.id} onClick={addBookBookstore}>Add</a></td>
             </tr>
           ))}
         </tbody>

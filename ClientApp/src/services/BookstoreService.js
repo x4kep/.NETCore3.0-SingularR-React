@@ -1,7 +1,7 @@
 import http from "./http-common.js";
 
 const getBookstoresAsync = () => {
-  return http.get("/Bookstore");
+  return http.get(`/Bookstore`);
 };
 
 const getBookstoreAsync = id => {
@@ -24,15 +24,11 @@ const getNotBookstoreBooksAsync = (id) => {
 };
 
 const removeBookstoreBooksAsync = (bookId, bookstoreId) => {
-  return http.post("/Utility/RemoveBookBookstore?bookId="+ bookId +"&bookstoreId="+ bookstoreId);
+  return http.post(`/Utility/RemoveBookBookstore?bookId=` + bookId + `&bookstoreId=` + bookstoreId);
 };
 
 const addBookstoreBooksAsync = (bookId, bookstoreId) => {
-  return http.post("/Utility/AddBookBookstore?bookId="+ bookId +"&bookstoreId="+ bookstoreId);
-};
-
-const findByTitle = title => {
-  return http.get(`/tutorials?title=${title}`);
+  return http.post(`/Utility/AddBookBookstore?bookId=` + bookId + `&bookstoreId=` + bookstoreId);
 };
 
 export default {

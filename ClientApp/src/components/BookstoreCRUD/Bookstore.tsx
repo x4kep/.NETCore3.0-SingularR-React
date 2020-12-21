@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { connect } from 'react-redux';
-import { RouteComponentProps, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import * as signalR from "@microsoft/signalr";
 import BookstoreService from "../../services/BookstoreService.js"
 import { BookstoreDto } from '../../ModelsDTO/Bookstore'
@@ -10,9 +9,12 @@ import { BookstoreBooksHubDto } from "../../ModelsDTO/BookstoreBooksHubDto.js";
 const Bookstore: React.FC = () => {
   const [bookstore, setBookstore] = useState<BookstoreDto>();
   const [bookstoreBooks, setBookstoreBooks] = useState<BookstoreDto[]>();
-  const [date, setDate] = useState<Date>();
 
-  const hubConnection = new signalR.HubConnectionBuilder().withUrl("/bookstorebooks").build();
+  const hubConnection = new signalR.HubConnectionBuilder()
+    .withUrl("/bookstorebooks")
+    .withAutomaticReconnect()
+    .build();
+
   hubConnection.start();
 
   let { id }: any = useParams();
@@ -43,10 +45,9 @@ const Bookstore: React.FC = () => {
 
   const getBookstoreBooksHub = () => {
     hubConnection.on("notifyBookstoreChanges", (message: BookstoreBooksHubDto) => {
-      setDate(new Date());
       setBookstoreBooks(message.bookstoreBooks);
       console.log(message);
-      if (message.bookstoreId == id) {
+      if (message.bookstoreId === Number(id)) {
         setBookstoreBooks(message.bookstoreBooks);
       }
     })
