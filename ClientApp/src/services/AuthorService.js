@@ -28,11 +28,20 @@ const updateAuthorAsync = (data) => {
   return http.post(`/Author/${data.id}`, formData);
 };
 
+const getAuthorBioAsync = (id) => {
+  return http.get(`/Utility/GetAuthorBio/${id}`);
+};
+
+const getAuthorBooksAsync = (id) => {
+  return http.get(`/Utility/GetAuthorBooks/${id}`);
+};
 
 export default {
   getAuthorsAsync,
   getAuthorAsync,
   createAuthorAsync,
   updateAuthorAsync,
-  deleteAuthorAsync
+  deleteAuthorAsync,
+  getAuthorBioAsync,
+  getAuthorBooksAsync
 };

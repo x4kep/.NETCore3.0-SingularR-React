@@ -19,12 +19,12 @@ const Bookstores: React.FC = () => {
     });
   }
 
-  const deleteBookstore = (event:any) => {
+  const deleteBookstore = (event: any) => {
     let bookstoreId = Number(event.target.dataset.bookstoreid);
     let bookstoreName = event.target.dataset.bookstorename;
     let answer = window.confirm(`Delete ` + bookstoreName + ` are you sure? `)
 
-    if(answer) {
+    if (answer) {
       BookstoreService.deleteBookstoreAsync(bookstoreId).then(response => {
         console.log(response.data);
         getBookstore();
@@ -37,7 +37,7 @@ const Bookstores: React.FC = () => {
 
   return (
     <div>
-      <h3>Bookstore</h3>
+      <h3>Bookstores</h3>
       <table className="table table-striped">
         <thead>
           <tr>
@@ -56,7 +56,7 @@ const Bookstores: React.FC = () => {
               <td className="align-middle">{item.createdDate}</td>
               <td className="align-middle">{item.updatedDate}</td>
               <td>
-                <a className="btn btn-outline-danger ml-3" role="button" data-bookstoreid = {item.id} data-bookstorename = {item.name} onClick={deleteBookstore} >Delete</a>
+                <a className="btn btn-outline-danger ml-3" role="button" data-bookstoreid={item.id} data-bookstorename={item.name} onClick={deleteBookstore} >Delete</a>
                 <Link to={"/Bookstore/" + item.id} className="btn btn-outline-primary ml-3" role="button">View</Link>
                 <Link to={"/BookstoreEdit/" + item.id} className="btn btn-primary ml-3" role="button">Edit</Link>
               </td>
@@ -64,7 +64,7 @@ const Bookstores: React.FC = () => {
           ))}
         </tbody>
       </table>
-      <Link to={"/BookstoreCreate"} className="btn btn-primary ml-3 mt-3 float-right"  role="button">Create</Link>
+      <Link to={"/BookstoreCreate"} className="btn btn-primary ml-3 mt-3 float-right" role="button">Create</Link>
     </div>
   );
 }

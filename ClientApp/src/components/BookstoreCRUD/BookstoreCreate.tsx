@@ -11,12 +11,12 @@ const BookstoreCreate: React.FC = () => {
   let history = useHistory();
 
   const createBookstore = () => {
-    if(!bookstore.name){setBookstoreNameError("Client error model is not valid."); return;}
+    if (!bookstore.name) { setBookstoreNameError("Client error model is not valid."); return; }
 
     BookstoreService.createBookstoreAsync(bookstore).then(response => {
       history.push("/");
     }).catch(e => {
-      if (e.response.status === 400){
+      if (e.response.status === 400) {
         setBookstoreNameError("Server error model is not valid.");
       }
     });
@@ -25,9 +25,9 @@ const BookstoreCreate: React.FC = () => {
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     setBookstore({ ...bookstore, [name]: value });
-    if(!value){
+    if (!value) {
       setBookstoreNameError("Client error model is not valid.");
-    }else{
+    } else {
       setBookstoreNameError("");
     }
   };
@@ -42,10 +42,10 @@ const BookstoreCreate: React.FC = () => {
           id="name"
           name="name"
           className="form-control"
-          value = {bookstore.name}
+          value={bookstore.name}
           onChange={handleInputChange}
         ></input>
-        <div className="invalid-feedback" style={ (bookstoreNameError) ? {display: 'block'} : {display: 'none'}} >
+        <div className="invalid-feedback" style={(bookstoreNameError) ? { display: 'block' } : { display: 'none' }} >
           {bookstoreNameError}
         </div>
       </form>

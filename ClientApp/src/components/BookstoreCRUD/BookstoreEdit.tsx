@@ -47,16 +47,16 @@ const BookstoreEdit: React.FC = () => {
     });
   }
 
-    const updateBookstore = () => {
+  const updateBookstore = () => {
     if (!bookstore.name) { setBookstoreNameError("Client error model is not valid."); return; }
 
     BookstoreService.updateBookstoreAsync(bookstore).then(response => {
       history.push("/");
     }).catch(e => {
       if (e.response.status === 400) {
-          setBookstoreNameError("Server error model is not valid.");
+        setBookstoreNameError("Server error model is not valid.");
       }
-        console.log(e);
+      console.log(e);
     });
   }
 
@@ -86,13 +86,13 @@ const BookstoreEdit: React.FC = () => {
     });
   }
 
-  const handleInputChange = (e:any) => {
+  const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     setBookstore({ ...bookstore, [name]: value });
     if (!value) {
-        setBookstoreNameError("Client error model is not valid.");
+      setBookstoreNameError("Client error model is not valid.");
     } else {
-        setBookstoreNameError("");
+      setBookstoreNameError("");
     }
   };
 
@@ -110,7 +110,7 @@ const BookstoreEdit: React.FC = () => {
           onChange={e => handleInputChange(e)}
         ></input>
         <div className="invalid-feedback" style={(bookstoreNameError) ? { display: 'block' } : { display: 'none' }} >
-            {bookstoreNameError}
+          {bookstoreNameError}
         </div>
       </form>
       <h5 className="mt-3">Books</h5>
@@ -127,7 +127,7 @@ const BookstoreEdit: React.FC = () => {
               <tr key={index}>
                 <td className="align-middle" style={{ width: "80%" }}>{bookstoreBooks.name}</td>
                 <td className="align-middle">
-                  <a className="btn btn-outline-danger ml-3 mt-1" role="button"  data-bookid={bookstoreBooks.id} onClick={removeBookBookstore}>Remove</a>
+                  <a className="btn btn-outline-danger ml-3 mt-1" role="button" data-bookid={bookstoreBooks.id} onClick={removeBookBookstore}>Remove</a>
                 </td>
               </tr>
             ))}
@@ -135,7 +135,7 @@ const BookstoreEdit: React.FC = () => {
         </table>
       ) : (
           <p>No books</p>
-      )}
+        )}
       <h5 className="mt-3">Add books</h5>
       <table className="table table-striped">
         <thead>

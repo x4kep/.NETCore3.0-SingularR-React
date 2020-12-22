@@ -53,7 +53,7 @@ const Book: React.FC = () => {
         </div>
         <div className="group-name">
           <label htmlFor="author">Author</label>
-          <select name="author" className="form-control" value= {book.authorId} disabled>
+          <select name="author" className="form-control" value={book.authorId} disabled>
             {authors && authors.map((item, key) => (
               <option key={key} value={item.id}>{item.name}</option>
             ))}

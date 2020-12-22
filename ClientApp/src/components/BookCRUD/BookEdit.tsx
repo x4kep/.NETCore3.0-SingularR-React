@@ -87,7 +87,7 @@ const BookEdit: React.FC = () => {
         </div>
         <div className="form-group">
           <label htmlFor="author">Author</label>
-          <select name="author" className="form-control" onChange={handleSelectChange} value= {book.authorId}>
+          <select name="author" className="form-control" onChange={handleSelectChange} value={book.authorId}>
             {authors && authors.map((item, key) => (
               <option key={key} value={item.id}>{item.name}</option>
             ))}
