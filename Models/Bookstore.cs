@@ -10,9 +10,6 @@ namespace EuroDeskBookstoresAssigment.Models
     {
         public int Id { get; set; }
 
-
-        //[Required]
-        //[StringLength(3, ErrorMessage = "{0} length must be between {2} and {1}.", MinimumLength = 36)]
         public string Name { get; set; }
 
         public DateTimeOffset CreatedDate { get; set; }

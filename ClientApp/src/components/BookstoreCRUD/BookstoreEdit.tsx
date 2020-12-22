@@ -101,6 +101,9 @@ const BookstoreEdit: React.FC = () => {
           value={bookstoreName}
           onChange={e => handleInputChange(e)}
         ></input>
+        <div className="invalid-feedback">
+          Invalid bookstore name.
+        </div>
       </form>
       <h5 className="mt-3">Books</h5>
       { (bookstoreBooks != undefined && bookstoreBooks.length > 0) ? (

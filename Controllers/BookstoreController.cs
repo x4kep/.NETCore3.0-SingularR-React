@@ -69,13 +69,14 @@ namespace EuroDeskBookstoresAssigment.Controllers
 
         // POST: api/Bookstore/CreateBookstore
         [HttpPost]
-        public async Task<IActionResult> CreateBookstore([FromForm]Bookstore bookstore)
+        public async Task<IActionResult> CreateBookstore([FromForm]BookstoreDto bookstoreDto)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _context.CreateBookstoreAsync(bookstore);
+                    var bookstoreModel = _mapper.Map<Bookstore>(bookstoreDto);
+                    await _context.CreateBookstoreAsync(bookstoreModel);
                     return Ok();
                 }
                 catch(Exception ex)

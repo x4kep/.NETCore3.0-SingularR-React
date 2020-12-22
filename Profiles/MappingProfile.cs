@@ -16,6 +16,10 @@ namespace EuroDeskBookstoresAssigment.Profiles
             CreateMap<Book, BookDto>();
             CreateMap<Author, AuthorDto>();
             CreateMap<AuthorBio, AuthorBioDto>();
+            CreateMap<BookstoreDto, Bookstore >();
+            CreateMap<BookDto, Book>();
+            CreateMap<AuthorDto, Author>();
+            CreateMap<AuthorBioDto, AuthorBio>();
         }
     }
 }
