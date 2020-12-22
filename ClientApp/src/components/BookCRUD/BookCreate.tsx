@@ -8,7 +8,7 @@ import { AuthorDto } from "../../ModelsDTO/Authors.js";
 
 
 const BookCreate: React.FC = () => {
-  const [book, setBook] = useState({ name: "" } as BookDto);
+  const [book, setBook] = useState({ name: ""} as BookDto);
   const [authors, setAuthors] = useState<AuthorDto[]>();
   const [bookNameError, setBookNameError] = useState("");
 
@@ -21,6 +21,7 @@ const BookCreate: React.FC = () => {
   const getAuthors = () => {
     AuthorService.getAuthorsAsync().then(response => {
       setAuthors(response.data);
+      setBook({ ...book, authorId: response.data[0].id});
       console.log(response.data);
     }).catch(e => {
       console.log(e);
@@ -52,7 +53,7 @@ const BookCreate: React.FC = () => {
   const handleSelectChange = (e: any) => {
     let authorId = Number(e.target.value);
     console.log(e);
-    setBook({ ...book, id: authorId });
+    setBook({ ...book, authorId: authorId });
   };
 
   return (
@@ -75,7 +76,7 @@ const BookCreate: React.FC = () => {
         </div>
         <div className="form-group">
           <label htmlFor="author">Author</label>
-          <select name="author" className="form-control" onChange={handleSelectChange}>
+          <select name="author" className="form-control" value={authors && authors[0].id} onChange={handleSelectChange}>
             {authors && authors.map((item, key) => (
               <option key={key} value={item.id}>{item.name}</option>
             ))}

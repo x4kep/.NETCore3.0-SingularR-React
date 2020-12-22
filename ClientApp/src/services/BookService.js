@@ -15,7 +15,7 @@ const deleteBookAsync = id => {
 const createBookAsync = (data) => {
   var formData = new FormData();
   formData.append('name', data.name);
-  formData.append('authorId', data.id);
+  formData.append('authorId', data.authorId);
 
   return http.post("/Book", formData);
 };
@@ -25,7 +25,7 @@ const updateBookAsync = (data) => {
   formData.append('id', data.id);
   formData.append('name', data.name);
   formData.append('createdDate', data.createdDate);
-  formData.append('authorId', data.id);
+  formData.append('authorId', data.authorId);
 
   return http.post(`/Book/${data.id}`, formData);
 };

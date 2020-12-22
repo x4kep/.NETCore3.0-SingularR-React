@@ -64,7 +64,7 @@ const BookEdit: React.FC = () => {
   const handleSelectChange = (e: any) => {
     let authorId = Number(e.target.value);
     console.log(e);
-    setBook({ ...book, id: authorId });
+    setBook({ ...book, authorId: authorId });
   };
 
   return (
