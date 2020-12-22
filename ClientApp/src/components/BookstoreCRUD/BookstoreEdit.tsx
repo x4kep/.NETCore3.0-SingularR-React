@@ -4,6 +4,7 @@ import BookstoreService from "../../services/BookstoreService.js"
 import { BookstoreDto } from '../../ModelsDTO/Bookstore'
 import { Link } from "react-router-dom";
 import { useHistory } from 'react-router';
+import { BookDto } from "../../ModelsDTO/Book.js";
 
 const BookstoreEdit: React.FC = () => {
   const [bookstore, setBookstore] = useState({} as BookstoreDto);
@@ -67,7 +68,8 @@ const BookstoreEdit: React.FC = () => {
     BookstoreService.addBookstoreBooksAsync(bookId, bookstoreId).then(response => {
       //TODO: Move locally
       getBookstoreBooks();
-      getNotBookstoreBooks();
+      getNotBookstoreBooks();  
+
     }).catch(e => {
       console.log(e);
     });
