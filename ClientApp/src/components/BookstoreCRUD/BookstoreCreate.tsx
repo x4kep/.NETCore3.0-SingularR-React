@@ -50,7 +50,7 @@ const BookstoreCreate: React.FC = () => {
         </div>
       </form>
       <Link to={"/"} className="btn btn-primary mt-3" role="button">Go Back</Link>
-      <a className="btn btn-primary float-right mt-3" role="button" onClick={createBookstore}>Create</a>
+      <button className="btn btn-primary float-right mt-3" role="button" onClick={createBookstore}>Create</button>
     </div>
   );
 }

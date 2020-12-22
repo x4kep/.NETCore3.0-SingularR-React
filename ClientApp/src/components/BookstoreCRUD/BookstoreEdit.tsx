@@ -9,7 +9,7 @@ const BookstoreEdit: React.FC = () => {
   const [bookstore, setBookstore] = useState({} as BookstoreDto);
   const [bookstoreBooks, setBookstoreBooks] = useState<BookstoreDto[]>();
   const [notBookstoreBooks, setNotBookstoreBooks] = useState<BookstoreDto[]>();
-  const [bookstoreName, setBookstoreName] = useState("");
+  const [bookstoreNameError, setBookstoreNameError] = useState("");
 
   let { id }: any = useParams();
   let history = useHistory();
@@ -23,7 +23,6 @@ const BookstoreEdit: React.FC = () => {
   const getBookstore = () => {
     BookstoreService.getBookstoreAsync(id).then(response => {
       setBookstore(response.data);
-      setBookstoreName(response.data.name);
       console.log(response.data);
     }).catch(e => {
       console.log(e);
@@ -48,11 +47,16 @@ const BookstoreEdit: React.FC = () => {
     });
   }
 
-  const updateBookstore = () => {
+    const updateBookstore = () => {
+    if (!bookstore.name) { setBookstoreNameError("Client error model is not valid."); return; }
+
     BookstoreService.updateBookstoreAsync(bookstore).then(response => {
       history.push("/");
     }).catch(e => {
-      console.log(e);
+      if (e.response.status === 400) {
+          setBookstoreNameError("Server error model is not valid.");
+      }
+        console.log(e);
     });
   }
 
@@ -85,7 +89,11 @@ const BookstoreEdit: React.FC = () => {
   const handleInputChange = (e:any) => {
     const { name, value } = e.target;
     setBookstore({ ...bookstore, [name]: value });
-    setBookstoreName(value);
+    if (!value) {
+        setBookstoreNameError("Client error model is not valid.");
+    } else {
+        setBookstoreNameError("");
+    }
   };
 
   return (
@@ -98,11 +106,11 @@ const BookstoreEdit: React.FC = () => {
           id="name"
           name="name"
           className="form-control"
-          value={bookstoreName}
+          value={bookstore.name}
           onChange={e => handleInputChange(e)}
         ></input>
-        <div className="invalid-feedback">
-          Invalid bookstore name.
+        <div className="invalid-feedback" style={(bookstoreNameError) ? { display: 'block' } : { display: 'none' }} >
+            {bookstoreNameError}
         </div>
       </form>
       <h5 className="mt-3">Books</h5>

@@ -69,13 +69,13 @@ namespace EuroDeskBookstoresAssigment.Controllers
 
         // POST: api/Author/CreateAuthor
         [HttpPost]
-        public async Task<IActionResult> CreateAuthor([FromForm]Author bookstore)
+        public async Task<IActionResult> CreateAuthor([FromForm]Author author)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _context.CreateAuthorAsync(bookstore);
+                    await _context.CreateAuthorAsync(author);
                     return Ok();
                 }
                 catch(Exception ex)
@@ -89,13 +89,13 @@ namespace EuroDeskBookstoresAssigment.Controllers
 
         // POST: api/Author/UpdateAuthor/1
         [HttpPost("{id}")]
-        public async Task<IActionResult> UpdateAuthor([FromForm]Author bookstore)
+        public async Task<IActionResult> UpdateAuthor([FromForm]Author author)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _context.UpdateAuthorAsync(bookstore);
+                    await _context.UpdateAuthorAsync(author);
                     return Ok();
                 }
                 catch (Exception ex)

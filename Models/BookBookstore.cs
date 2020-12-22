@@ -9,7 +9,6 @@ namespace EuroDeskBookstoresAssigment.Models
     {
         public int BookId { get; set; }
         public Book Book { get; set; }
-
         public int BookstoreId { get; set; }
         public Bookstore Bookstore { get; set; }
     }

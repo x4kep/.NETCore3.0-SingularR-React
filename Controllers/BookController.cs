@@ -69,13 +69,14 @@ namespace EuroDeskBookstoresAssigment.Controllers
 
         // POST: api/Book/CreateBook
         [HttpPost]
-        public async Task<IActionResult> CreateBook([FromForm]Book bookstore)
+        public async Task<IActionResult> CreateBook([FromForm]BookDto bookDto)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _context.CreateBookAsync(bookstore);
+                    var bookModel = _mapper.Map<Book>(bookDto);
+                    await _context.CreateBookAsync(bookModel);
                     return Ok();
                 }
                 catch(Exception ex)
@@ -89,13 +90,14 @@ namespace EuroDeskBookstoresAssigment.Controllers
 
         // POST: api/Book/UpdateBook/1
         [HttpPost("{id}")]
-        public async Task<IActionResult> UpdateBook([FromForm]Book bookstore)
+        public async Task<IActionResult> UpdateBook([FromForm]BookDto bookDto)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _context.UpdateBookAsync(bookstore);
+                    var bookModel = _mapper.Map<Book>(bookDto);
+                    await _context.UpdateBookAsync(bookModel);
                     return Ok();
                 }
                 catch (Exception ex)

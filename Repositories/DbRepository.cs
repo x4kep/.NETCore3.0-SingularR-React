@@ -22,7 +22,6 @@ namespace EuroDeskBookstoresAssigment.Repositories
         {
             return await _context.Bookstore.Where(b => !b.IsDeleted).OrderByDescending(b => b.Id).ToListAsync();
         }
-
         async public Task<Bookstore> GetBookstoreAsync(int id)
         {
             return await _context.Bookstore.Where(b => b.Id == id && !b.IsDeleted).SingleOrDefaultAsync();
@@ -30,6 +29,7 @@ namespace EuroDeskBookstoresAssigment.Repositories
         async public Task CreateBookstoreAsync(Bookstore bookstore)
         {
             bookstore.CreatedDate = DateTime.UtcNow;
+            bookstore.UpdatedDate = DateTime.UtcNow;
             await _context.Bookstore.AddAsync(bookstore);
             await _context.SaveChangesAsync();
         }
@@ -77,6 +77,7 @@ namespace EuroDeskBookstoresAssigment.Repositories
         async public Task CreateBookAsync(Book bookstore)
         {
             bookstore.CreatedDate = DateTime.UtcNow;
+            bookstore.UpdatedDate = DateTime.UtcNow;
             _context.Book.Add(bookstore);
             await _context.SaveChangesAsync();
         }
@@ -124,6 +125,7 @@ namespace EuroDeskBookstoresAssigment.Repositories
         async public Task CreateAuthorAsync(Author author)
         {
             author.CreatedDate = DateTime.UtcNow;
+            author.UpdatedDate = DateTime.UtcNow;
             _context.Author.Add(author);
             await _context.SaveChangesAsync();
         }
